@@ -1,25 +1,18 @@
-import axios from "axios";
+import client from "../db/index";
 
 interface IResponse {
   name: string;
   email: string;
-  address: {
-    city: string;
-    state: string;
-    houseNumber: string;
-  };
+  password: string | null;
 }
 
-async function getUserDetails(): Promise<IResponse> {
-  const resp = await axios.get(
-    // "https://week-13-offline.kirattechnologies.workers.dev/api/v1/user/details"
-    "http://localhost:3000/api/user"
-  );
-  return resp.data;
+async function getUserDetails(): Promise<IResponse | null> {
+  const user = await client.user.findFirst();
+  return user;
 }
 
 export default async function Home() {
-  const userData: IResponse = await getUserDetails();
+  const userData: IResponse | null = await getUserDetails();
 
   return (
     <div className="flex items-center h-screen justify-center bg-blue-100">
@@ -27,13 +20,13 @@ export default async function Home() {
         <div className="flex items-center gap-x-2">
           <div className="font-bold text-xl">NAME: </div>
           <div className="text-xl font-sans text-purple-800 uppercase">
-            {userData.name}
+            {userData?.name}
           </div>
         </div>
         <div className="flex items-center gap-x-2">
           <div className="font-bold text-xl">EMAIL: </div>
           <div className="text-lg font-serif text-red-800">
-            {userData.email}
+            {userData?.email}
           </div>
         </div>
       </div>

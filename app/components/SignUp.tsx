@@ -1,19 +1,19 @@
 "use client";
 
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { signUpUser } from "../actions/user";
 
 const SignUp = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
 
-  const handleSubmit = () => {
-    console.log("NAME::", name);
-    console.log("EMAIl::", email);
-    axios.post("http://localhost:3000/api/user", {
-      name: name,
-      email: email,
-    });
+  const router = useRouter();
+
+  const handleSubmit = async () => {
+    await signUpUser(name, email);
+    router.push("/");
   };
 
   return (
